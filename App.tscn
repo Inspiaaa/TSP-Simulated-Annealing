@@ -1,0 +1,219 @@
+[gd_scene load_steps=7 format=3 uid="uid://d1jgxvcvfewy4"]
+
+[ext_resource type="Script" path="res://Scripts/TspRenderer.cs" id="1_ow1qn"]
+[ext_resource type="Script" path="res://Scripts/TspAnimation.cs" id="2_vbjjb"]
+[ext_resource type="Theme" uid="uid://dgunrpoxh0hti" path="res://UI/Theme.tres" id="3_4xfy6"]
+[ext_resource type="Script" path="res://Scripts/CameraController.cs" id="3_njvda"]
+[ext_resource type="LabelSettings" uid="uid://cevvvw2gl0iki" path="res://UI/BoldText.tres" id="4_ieix8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_leodl"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="Node2D" type="Node2D"]
+
+[node name="OriginalRouteRenderer" type="Node2D" parent="."]
+unique_name_in_owner = true
+visible = false
+script = ExtResource("1_ow1qn")
+routeLineColor = Color(0, 0, 0, 0.392157)
+routeLineWidth = 1.0
+renderCities = false
+
+[node name="GreedyRouteRenderer" type="Node2D" parent="."]
+unique_name_in_owner = true
+visible = false
+script = ExtResource("1_ow1qn")
+routeLineColor = Color(0.92549, 0.321569, 0.529412, 0.784314)
+renderCities = false
+
+[node name="SimulatedAnnealingRenderer" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_ow1qn")
+routeLineColor = Color(0.115684, 0.469505, 0.758494, 0.901961)
+routeLineWidth = 3.0
+renderCities = false
+
+[node name="CityRenderer" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_ow1qn")
+renderRoute = false
+
+[node name="Animation" type="Node2D" parent="."]
+script = ExtResource("2_vbjjb")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(300, 300)
+script = ExtResource("3_njvda")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 62.0
+grow_vertical = 2
+mouse_filter = 0
+mouse_force_pass_scroll_events = false
+theme = ExtResource("3_4xfy6")
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_leodl")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/MarginContainer/PanelContainer"]
+layout_mode = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Cities"
+
+[node name="CityCountInput" type="SpinBox" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 25.0
+alignment = 2
+update_on_text_changed = true
+
+[node name="NewCitiesButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "New Cities"
+
+[node name="HSeparator" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RestartButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Restart"
+
+[node name="AdvanceButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Next Step"
+
+[node name="ToggleAnimationButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+text = "Play / Pause"
+
+[node name="SpeedSlider" type="HSlider" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 10000.0
+step = 0.01
+value = 10.0
+exp_edit = true
+
+[node name="HSeparator2" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SimulatedAnnealingLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Sim. Annealing"
+label_settings = ExtResource("4_ieix8")
+uppercase = true
+
+[node name="TemperatureLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Temp.: 100"
+
+[node name="DistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Dist.: 100"
+
+[node name="ReheatButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "When enabled, the algorithm will increase the temperature
+once it drops to a predefined threshold.
+This allows the algorithm to escape local maxima."
+text = "Reheat"
+
+[node name="UseGreedyRouteButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "When enabled, the algorithm will use the route of 
+the greedy solver as its starting route."
+text = "Use greedy route
+as start"
+
+[node name="ShowSimulatedAnnealingButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Show"
+
+[node name="HSeparator3" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GreedyLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Greedy Solver"
+label_settings = ExtResource("4_ieix8")
+uppercase = true
+
+[node name="GreedyDistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Dist.: 100"
+
+[node name="ShowGreedyButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Show"
+
+[node name="HSeparator4" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="OriginalLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Original"
+label_settings = ExtResource("4_ieix8")
+uppercase = true
+
+[node name="OriginalDistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Dist.: 100"
+
+[node name="ShowOriginalButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Show"
+
+[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/NewCitiesButton" to="Animation" method="RestartWithNewCities"]
+[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/RestartButton" to="Animation" method="RestartAnimation"]
+[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvanceButton" to="Animation" method="Advance"]
+[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/ToggleAnimationButton" to="Animation" method="ToggleAnimation"]
+[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/ReheatButton" to="Animation" method="SetReheatWhenCool"]
+[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/UseGreedyRouteButton" to="Animation" method="SetReheatWhenCool"]
+[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/ShowSimulatedAnnealingButton" to="Animation" method="SetSimulatedAnnealingRouteVisible"]
+[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/ShowGreedyButton" to="Animation" method="SetGreedyRouteVisible"]
+[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/ShowOriginalButton" to="Animation" method="SetOriginalRouteVisible"]
