@@ -141,7 +141,7 @@ public partial class TspAnimation : Node2D
 
 		float initialTemperature = 100;
 		float minTemperature = 0.01f;
-		float targetIterationCount = originalRoute.Length * 100;
+		float targetIterationCount = originalRoute.Length * 150;
 		float temperatureDecay = Mathf.Pow(minTemperature / initialTemperature, 1 / targetIterationCount);
 
 		GD.Print($"Using temp. decay: {temperatureDecay}");
