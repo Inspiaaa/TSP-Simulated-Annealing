@@ -104,6 +104,7 @@ update_on_text_changed = true
 
 [node name="NewCitiesButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+tooltip_text = "Generates new, randomly placed cities."
 text = "New Cities"
 
 [node name="HSeparator" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
@@ -111,21 +112,29 @@ layout_mode = 2
 
 [node name="RestartButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+tooltip_text = "Resets the simulated annealing animation without 
+changing the cities."
 text = "Restart"
 
 [node name="AdvanceButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+tooltip_text = "Simulates one logic step of the simulated 
+annealing algorithm."
 text = "Next Step"
 
 [node name="ToggleAnimationButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Automatically advances the simulated annealing
+process each frame. The speed can be adjusted 
+using the slider below."
 toggle_mode = true
 text = "Play / Pause"
 
 [node name="SpeedSlider" type="HSlider" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Adjusts the speed of the animation."
 min_value = 1.0
 max_value = 10000.0
 step = 0.01
@@ -144,18 +153,24 @@ uppercase = true
 [node name="TemperatureLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Current temperature parameter used in the
+simulated annealing algorithm."
+mouse_filter = 1
 text = "Temp.: 100"
 
 [node name="DistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "The current round trip distance.
+(Lower is better)"
+mouse_filter = 1
 text = "Dist.: 100"
 
 [node name="ReheatButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "When enabled, the algorithm will increase the temperature
-once it drops to a predefined threshold.
+tooltip_text = "When enabled, the algorithm will increase the 
+temperature once it drops to a predefined threshold.
 This allows the algorithm to escape local maxima."
 text = "Reheat"
 
@@ -184,6 +199,9 @@ uppercase = true
 [node name="GreedyDistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "The round trip distance obtained using a greedy 
+optimizer. (Lower is better)"
+mouse_filter = 1
 text = "Dist.: 100"
 
 [node name="ShowGreedyButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
@@ -202,6 +220,9 @@ uppercase = true
 [node name="OriginalDistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "The round trip distance before optimising.
+(Lower is better)"
+mouse_filter = 1
 text = "Dist.: 100"
 
 [node name="ShowOriginalButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
