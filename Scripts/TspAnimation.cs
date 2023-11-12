@@ -134,14 +134,16 @@ public partial class TspAnimation : Node2D
 		float ticksPerSecond = animationSpeed.Value - 1;
 		int ticks = Mathf.FloorToInt(elapsedTimeSinceLastTick * ticksPerSecond);
 
-		// Prevent vicious circle.
+		// Prevent vicious circle when the system cannot takes too long for the ticks,
+		// thus increasing the delta variable in the next frame, further increasing
+		// the number of ticks to process.
 		ticks = Mathf.Min(ticks, Mathf.CeilToInt(ticksPerSecond));
 
 		if (ticks > 0)
 		{
 			elapsedTimeSinceLastTick -= ticks / ticksPerSecond;
 
-			for (int i = 0; i <= ticks; i++)
+			for (int i = 0; i < ticks; i++)
 			{
 				solver.Simulate();
 			}
