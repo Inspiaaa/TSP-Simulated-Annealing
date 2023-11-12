@@ -194,7 +194,8 @@ public partial class TspAnimation : Node2D
 		isPlayingAnimation.Value = false;
 	}
 
-	private float ComputeTemperatureDecay() {
+	private float ComputeTemperatureDecay()
+	{
 		// We're trying to solve for the temperature decay variable, given the initial
 		// temperature, the termination temperature (minTemp.), and the target iteration
 		// count which scales with the number of cities.
@@ -216,13 +217,15 @@ public partial class TspAnimation : Node2D
 		return temperatureDecay;
 	}
 
-	private void UpdateTemperatureDecay() {
+	private void UpdateTemperatureDecay()
+	{
 		float decay = ComputeTemperatureDecay();
 		solver.TemperatureDecay = decay;
-		GetNode<Label>("%TemperatureDecayValueLabel").Text = $"Decay: {decay :f5}";
+		GetNode<Label>("%TemperatureDecayValueLabel").Text = $"Decay: {decay:f5}";
 	}
 
-	public void ResetAdvancedSettings() {
+	public void ResetAdvancedSettings()
+	{
 		initialTemperature.Reset();
 		temperatureDecaySpeedModifier.Reset();
 		reheatThresholdTemperature.Reset();
