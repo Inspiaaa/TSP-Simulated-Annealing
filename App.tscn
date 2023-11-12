@@ -1,20 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://d1jgxvcvfewy4"]
+[gd_scene load_steps=6 format=3 uid="uid://d1jgxvcvfewy4"]
 
 [ext_resource type="Script" path="res://Scripts/TspRenderer.cs" id="1_ow1qn"]
 [ext_resource type="Script" path="res://Scripts/TspAnimation.cs" id="2_vbjjb"]
 [ext_resource type="Theme" uid="uid://dgunrpoxh0hti" path="res://UI/Theme.tres" id="3_4xfy6"]
 [ext_resource type="Script" path="res://Scripts/CameraController.cs" id="3_njvda"]
 [ext_resource type="LabelSettings" uid="uid://cevvvw2gl0iki" path="res://UI/BoldText.tres" id="4_ieix8"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_leodl"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
 
 [node name="Node2D" type="Node2D"]
 
@@ -68,7 +58,6 @@ theme_override_constants/margin_bottom = 20
 
 [node name="PanelContainer" type="PanelContainer" parent="UI/MarginContainer"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_leodl")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="UI/MarginContainer/PanelContainer"]
 layout_mode = 2
@@ -85,14 +74,17 @@ theme_override_constants/margin_bottom = 10
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="SetupVBox" type="VBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="CityCountHBox" type="HBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SetupVBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SetupVBox/CityCountHBox"]
 layout_mode = 2
 text = "Cities"
 
-[node name="CityCountInput" type="SpinBox" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="CityCountInput" type="SpinBox" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SetupVBox/CityCountHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -102,7 +94,7 @@ value = 25.0
 alignment = 2
 update_on_text_changed = true
 
-[node name="NewCitiesButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="NewCitiesButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SetupVBox"]
 layout_mode = 2
 tooltip_text = "Generates new, randomly placed cities."
 text = "New Cities"
@@ -110,19 +102,22 @@ text = "New Cities"
 [node name="HSeparator" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="RestartButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="AnimationControlVBox" type="VBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RestartButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControlVBox"]
 layout_mode = 2
 tooltip_text = "Resets the simulated annealing animation without 
 changing the cities."
 text = "Restart"
 
-[node name="AdvanceButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="AdvanceButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControlVBox"]
 layout_mode = 2
 tooltip_text = "Simulates one logic step of the simulated 
 annealing algorithm."
 text = "Next Step"
 
-[node name="ToggleAnimationButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="ToggleAnimationButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControlVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Automatically advances the simulated annealing
@@ -131,7 +126,7 @@ using the slider below."
 toggle_mode = true
 text = "Play / Pause"
 
-[node name="SpeedSlider" type="HSlider" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="SpeedSlider" type="HSlider" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControlVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Adjusts the speed of the animation."
@@ -144,13 +139,16 @@ exp_edit = true
 [node name="HSeparator2" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="SimulatedAnnealingLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="SimulatedAnnealingVBox" type="VBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SimulatedAnnealingLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox"]
 layout_mode = 2
 text = "Sim. Annealing"
 label_settings = ExtResource("4_ieix8")
 uppercase = true
 
-[node name="TemperatureLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="TemperatureLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Current temperature parameter used in the
@@ -158,7 +156,7 @@ simulated annealing algorithm."
 mouse_filter = 1
 text = "Temp.: 100"
 
-[node name="DistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="DistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "The current round trip distance.
@@ -166,7 +164,7 @@ tooltip_text = "The current round trip distance.
 mouse_filter = 1
 text = "Dist.: 100"
 
-[node name="ReheatButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="ReheatButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "When enabled, the algorithm will increase the 
@@ -174,7 +172,7 @@ temperature once it drops to a predefined threshold.
 This allows the algorithm to escape local maxima."
 text = "Reheat"
 
-[node name="UseGreedyRouteButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="UseGreedyRouteButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "When enabled, the algorithm will use the route of 
@@ -182,7 +180,7 @@ the greedy solver as its starting route."
 text = "Use greedy route
 as start"
 
-[node name="ShowSimulatedAnnealingButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="ShowSimulatedAnnealingButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox"]
 layout_mode = 2
 button_pressed = true
 text = "Show"
@@ -190,13 +188,16 @@ text = "Show"
 [node name="HSeparator3" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="GreedyLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="GreedySolverVBox" type="VBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GreedyLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/GreedySolverVBox"]
 layout_mode = 2
 text = "Greedy Solver"
 label_settings = ExtResource("4_ieix8")
 uppercase = true
 
-[node name="GreedyDistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="GreedyDistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/GreedySolverVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "The round trip distance obtained using a greedy 
@@ -204,20 +205,23 @@ optimizer. (Lower is better)"
 mouse_filter = 1
 text = "Dist.: 100"
 
-[node name="ShowGreedyButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="ShowGreedyButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/GreedySolverVBox"]
 layout_mode = 2
 text = "Show"
 
 [node name="HSeparator4" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="OriginalLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="OriginalRouteVBox" type="VBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="OriginalLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/OriginalRouteVBox"]
 layout_mode = 2
 text = "Original"
 label_settings = ExtResource("4_ieix8")
 uppercase = true
 
-[node name="OriginalDistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="OriginalDistanceLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/OriginalRouteVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "The round trip distance before optimising.
@@ -225,16 +229,15 @@ tooltip_text = "The round trip distance before optimising.
 mouse_filter = 1
 text = "Dist.: 100"
 
-[node name="ShowOriginalButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="ShowOriginalButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/OriginalRouteVBox"]
 layout_mode = 2
 text = "Show"
 
-[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/NewCitiesButton" to="Animation" method="RestartWithNewCities"]
-[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/RestartButton" to="Animation" method="RestartAnimation"]
-[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvanceButton" to="Animation" method="Advance"]
-[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/ToggleAnimationButton" to="Animation" method="ToggleAnimation"]
-[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/ReheatButton" to="Animation" method="SetReheatWhenCool"]
-[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/UseGreedyRouteButton" to="Animation" method="SetReheatWhenCool"]
-[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/ShowSimulatedAnnealingButton" to="Animation" method="SetSimulatedAnnealingRouteVisible"]
-[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/ShowGreedyButton" to="Animation" method="SetGreedyRouteVisible"]
-[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/ShowOriginalButton" to="Animation" method="SetOriginalRouteVisible"]
+[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SetupVBox/NewCitiesButton" to="Animation" method="RestartWithNewCities"]
+[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControlVBox/RestartButton" to="Animation" method="RestartAnimation"]
+[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControlVBox/AdvanceButton" to="Animation" method="Advance"]
+[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControlVBox/ToggleAnimationButton" to="Animation" method="ToggleAnimation"]
+[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox/ReheatButton" to="Animation" method="SetReheatWhenCool"]
+[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox/ShowSimulatedAnnealingButton" to="Animation" method="SetSimulatedAnnealingRouteVisible"]
+[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/GreedySolverVBox/ShowGreedyButton" to="Animation" method="SetGreedyRouteVisible"]
+[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/OriginalRouteVBox/ShowOriginalButton" to="Animation" method="SetOriginalRouteVisible"]
