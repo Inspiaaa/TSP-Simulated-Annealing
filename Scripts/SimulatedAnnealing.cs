@@ -8,17 +8,16 @@ public class SimulatedAnnealing
 	private readonly Vector2[] cities;
 	private float currentDistance;
 	private float temperature;
-	private readonly float temperatureDecay;
+	public float TemperatureDecay;
 
-	private float reheatTemperatureThreshold;
-	private float minReheatAmount;
-	private float maxReheatAmount;
+	public bool ReheatWhenCool = false;
+	public float ReheatThresholdTemperature;
+	public float MinReheatAmount;
+	public float MaxReheatAmount;
 
 	public Vector2[] BestRoute => cities;
 	public float BestDistance => currentDistance;
 	public float CurrentTemperature => temperature;
-
-	public bool ReheatWhenCool = false;
 
 	public SimulatedAnnealing(
 		Vector2[] cities,
@@ -26,7 +25,8 @@ public class SimulatedAnnealing
 		float initialTemperature = 100f,
 		float temperatureDecay = 0.99f,
 
-		float reheatTemperatureThreshold = 0.005f,
+		bool reheatWhenCool = false,
+		float reheatThresholdTemperature = 0.005f,
 		float minReheatAmount = 0.5f,
 		float maxReheatAmount = 20)
 	{
@@ -35,11 +35,12 @@ public class SimulatedAnnealing
 
 		this.currentDistance = TspUtil.ComputeDistance(cities);
 		this.temperature = initialTemperature;
-		this.temperatureDecay = temperatureDecay;
+		this.TemperatureDecay = temperatureDecay;
 
-		this.reheatTemperatureThreshold = reheatTemperatureThreshold;
-		this.minReheatAmount = minReheatAmount;
-		this.maxReheatAmount = maxReheatAmount;
+		this.ReheatWhenCool = reheatWhenCool;
+		this.ReheatThresholdTemperature = reheatThresholdTemperature;
+		this.MinReheatAmount = minReheatAmount;
+		this.MaxReheatAmount = maxReheatAmount;
 	}
 
 	private void SwapCities(int idx1, int idx2)
@@ -118,21 +119,16 @@ public class SimulatedAnnealing
 		return delta;
 	}
 
-	private void ShiftRange(int startIndex, int count, int distance) {
-
-	}
-	// TODO: Shift
-
 	public void Simulate()
 	{
-		if (ReheatWhenCool && temperature < reheatTemperatureThreshold) {
-			temperature += (float)GD.RandRange(minReheatAmount, maxReheatAmount);
+		if (ReheatWhenCool && temperature < ReheatThresholdTemperature) {
+			temperature += (float)GD.RandRange(MinReheatAmount, MaxReheatAmount);
 		}
 
 		Action acceptSolution = null;
 		float distanceChange = 0;
 
-		switch (Random.Shared.Next(2))
+		switch (Random.Shared.Next(3))
 		{
 			case 0:
 				int swapIndexA = RandomIndex();
@@ -142,7 +138,8 @@ public class SimulatedAnnealing
 				distanceChange = ComputeDistanceDeltaAfterSwap(swapIndexA, swapIndexB);
 				break;
 
-			case 1:
+			// Twice as likely as it is more powerful.
+			case 1: case 2:
 				int reverseStartIndex = RandomIndex();
 				int reverseCount = Random.Shared.Next(1, cities.Length / 2);
 
@@ -162,6 +159,6 @@ public class SimulatedAnnealing
 			acceptSolution();
 		}
 
-		temperature *= temperatureDecay;
+		temperature *= TemperatureDecay;
 	}
 }

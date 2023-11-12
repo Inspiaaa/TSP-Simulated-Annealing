@@ -180,7 +180,8 @@ the greedy solver as its starting route."
 text = "Use greedy route
 as start"
 
-[node name="ShowSimulatedAnnealingButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox"]
+[node name="ShowSimulatedAnnealingRouteButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox"]
+unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "Show"
@@ -205,7 +206,8 @@ optimizer. (Lower is better)"
 mouse_filter = 1
 text = "Dist.: 100"
 
-[node name="ShowGreedyButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/GreedySolverVBox"]
+[node name="ShowGreedyRouteButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/GreedySolverVBox"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Show"
 
@@ -229,15 +231,118 @@ tooltip_text = "The round trip distance before optimising.
 mouse_filter = 1
 text = "Dist.: 100"
 
-[node name="ShowOriginalButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/OriginalRouteVBox"]
+[node name="ShowOriginalRouteButton" type="CheckButton" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/OriginalRouteVBox"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Show"
+
+[node name="HSeparator5" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AdvancedSettingsVBox" type="VBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AdvancedSettingsLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+layout_mode = 2
+text = "Advanced"
+label_settings = ExtResource("4_ieix8")
+uppercase = true
+
+[node name="InitialTemperatureHBox" type="HBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox/InitialTemperatureHBox"]
+layout_mode = 2
+text = "Initial temp."
+
+[node name="InitialTemperatureInput" type="SpinBox" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox/InitialTemperatureHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1000.0
+step = 0.01
+value = 100.0
+allow_greater = true
+custom_arrow_step = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="DecaySpeedLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox/VBoxContainer"]
+layout_mode = 2
+text = "Decay speed"
+
+[node name="DecaySpeedSlider" type="HSlider" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.1
+max_value = 10.0
+step = 0.0
+value = 1.0
+exp_edit = true
+
+[node name="HSeparator1" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ReheatSettingsLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+layout_mode = 2
+text = "Reheat Settings"
+label_settings = ExtResource("4_ieix8")
+
+[node name="GridContainer" type="GridContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+layout_mode = 2
+columns = 2
+
+[node name="ReheatThresholdLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox/GridContainer"]
+layout_mode = 2
+text = "Reheat temp."
+
+[node name="ReheatThresholdInput" type="SpinBox" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.001
+step = 0.001
+value = 0.005
+
+[node name="MinReheatAmountLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox/GridContainer"]
+layout_mode = 2
+text = "Min. amount"
+
+[node name="MinReheatAmountInput" type="SpinBox" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+step = 0.01
+value = 0.5
+allow_greater = true
+
+[node name="MaxReheatAmountLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox/GridContainer"]
+layout_mode = 2
+text = "Max amount"
+
+[node name="MaxReheatAmountInput" type="SpinBox" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+step = 0.01
+value = 10.0
+allow_greater = true
+
+[node name="HSeparator2" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ResetButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+layout_mode = 2
+text = "Reset"
 
 [connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SetupVBox/NewCitiesButton" to="Animation" method="RestartWithNewCities"]
 [connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControlVBox/RestartButton" to="Animation" method="RestartAnimation"]
 [connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControlVBox/AdvanceButton" to="Animation" method="Advance"]
-[connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControlVBox/ToggleAnimationButton" to="Animation" method="ToggleAnimation"]
-[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox/ReheatButton" to="Animation" method="SetReheatWhenCool"]
-[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SimulatedAnnealingVBox/ShowSimulatedAnnealingButton" to="Animation" method="SetSimulatedAnnealingRouteVisible"]
-[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/GreedySolverVBox/ShowGreedyButton" to="Animation" method="SetGreedyRouteVisible"]
-[connection signal="toggled" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/OriginalRouteVBox/ShowOriginalButton" to="Animation" method="SetOriginalRouteVisible"]

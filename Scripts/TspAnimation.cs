@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using TspSolver.Util;
 
 namespace TspSolver;
 
@@ -15,8 +16,26 @@ public partial class TspAnimation : Node2D
 	private TspRenderer greedyRouteRenderer;
 	private TspRenderer cityRenderer;
 
+	private BooleanInput isPlayingAnimation;
+
+	private NumericInput cityCount;
+	private NumericInput animationSpeed;
+
+	private NumericInput initialTemperature;
+	private NumericInput temperatureDecaySpeedModifier;
+	private NumericInput reheatThresholdTemperature;
+	private NumericInput minReheatAmount;
+	private NumericInput maxReheatAmount;
+
+	private BooleanInput showSimulatedAnnealingRoute;
+	private BooleanInput showGreedyRoute;
+	private BooleanInput showOriginalRoute;
+
+	private BooleanInput reheatWhenCool;
+	private BooleanInput useGreedyRouteAsStart;
+
+	// For the animation.
 	private float elapsedTimeSinceLastTick = 0;
-	private bool isAnimationRunning = false;
 
 	public override void _Ready()
 	{
@@ -24,13 +43,52 @@ public partial class TspAnimation : Node2D
 		originalRouteRenderer = GetNode<TspRenderer>("%OriginalRouteRenderer");
 		greedyRouteRenderer = GetNode<TspRenderer>("%GreedyRouteRenderer");
 		cityRenderer = GetNode<TspRenderer>("%CityRenderer");
-		RestartWithNewCities();
-	}
 
-	public void Advance()
-	{
-		solver.Simulate();
-		UpdateDisplay();
+		isPlayingAnimation = new BooleanInput();
+
+		cityCount = new NumericInput();
+		animationSpeed = new NumericInput();
+
+		showSimulatedAnnealingRoute = new BooleanInput(
+			onChange: isVisible => simulatedAnnealingRouteRenderer.Visible = isVisible);
+		showGreedyRoute = new BooleanInput(
+			onChange: isVisible => greedyRouteRenderer.Visible = isVisible);
+		showOriginalRoute = new BooleanInput(
+			onChange: isVisible => originalRouteRenderer.Visible = isVisible);
+
+		reheatWhenCool = new BooleanInput(
+			onChange: reheat => { if (solver != null) solver.ReheatWhenCool = reheat; });
+		useGreedyRouteAsStart = new BooleanInput();
+
+		initialTemperature = new NumericInput();
+		temperatureDecaySpeedModifier = new NumericInput(
+			onChange: value => { if (solver != null) solver.TemperatureDecay = ComputeTemperatureDecay(); });
+		reheatThresholdTemperature = new NumericInput(
+			onChange: value => { if (solver != null) solver.ReheatThresholdTemperature = value; });
+		minReheatAmount = new NumericInput(
+			onChange: value => { if (solver != null) solver.MinReheatAmount = value; });
+		maxReheatAmount = new NumericInput(
+			onChange: value => { if (solver != null) solver.MaxReheatAmount = value; });
+
+		isPlayingAnimation.Bind(GetNode<Button>("%ToggleAnimationButton"));
+
+		cityCount.Bind(GetNode<SpinBox>("%CityCountInput"));
+		animationSpeed.Bind(GetNode<Slider>("%SpeedSlider"));
+
+		showSimulatedAnnealingRoute.Bind(GetNode<CheckButton>("%ShowSimulatedAnnealingRouteButton"));
+		showGreedyRoute.Bind(GetNode<CheckButton>("%ShowGreedyRouteButton"));
+		showOriginalRoute.Bind(GetNode<CheckButton>("%ShowOriginalRouteButton"));
+
+		reheatWhenCool.Bind(GetNode<CheckButton>("%ReheatButton"));
+		useGreedyRouteAsStart.Bind(GetNode<CheckButton>("%UseGreedyRouteButton"));
+
+		initialTemperature.Bind(GetNode<SpinBox>("%InitialTemperatureInput"));
+		temperatureDecaySpeedModifier.Bind(GetNode<Slider>("%DecaySpeedSlider"));
+		reheatThresholdTemperature.Bind(GetNode<SpinBox>("%ReheatThresholdInput"));
+		minReheatAmount.Bind(GetNode<SpinBox>("%MinReheatAmountInput"));
+		maxReheatAmount.Bind(GetNode<SpinBox>("%MaxReheatAmountInput"));
+
+		RestartWithNewCities();
 	}
 
 	private string FormatDistance(float distance) => $"Dist.: {distance / 10:f3}";
@@ -59,38 +117,20 @@ public partial class TspAnimation : Node2D
 		greedyRouteRenderer.DrawRoute(greedyRoute);
 	}
 
-	public void SetGreedyRouteVisible(bool isVisible)
+	public void Advance()
 	{
-		greedyRouteRenderer.Visible = isVisible;
-	}
-
-	public void SetOriginalRouteVisible(bool isVisible)
-	{
-		originalRouteRenderer.Visible = isVisible;
-	}
-
-	public void SetSimulatedAnnealingRouteVisible(bool isVisible)
-	{
-		simulatedAnnealingRouteRenderer.Visible = isVisible;
-	}
-
-	public void SetReheatWhenCool(bool shouldReheat) {
-		solver.ReheatWhenCool = shouldReheat;
-	}
-
-	public void ToggleAnimation()
-	{
-		isAnimationRunning = !isAnimationRunning;
+		solver.Simulate();
+		UpdateDisplay();
 	}
 
 	public override void _Process(double delta)
 	{
-		if (!isAnimationRunning)
+		if (!isPlayingAnimation.Value)
 			return;
 
 		elapsedTimeSinceLastTick += (float)delta;
 
-		float ticksPerSecond = (float)GetNode<Slider>("%SpeedSlider").Value - 1;
+		float ticksPerSecond = animationSpeed.Value - 1;
 		int ticks = Mathf.FloorToInt(elapsedTimeSinceLastTick * ticksPerSecond);
 
 		// Prevent vicious circle.
@@ -110,7 +150,7 @@ public partial class TspAnimation : Node2D
 
 	public void RestartWithNewCities()
 	{
-		int count = (int)GetNode<SpinBox>("%CityCountInput").Value;
+		int count = (int)cityCount.Value;
 
 		// This dynamically scales the canvas according to the number of cities.
 		// The underlying idea is to keep the density of cities somewhat the same,
@@ -139,25 +179,46 @@ public partial class TspAnimation : Node2D
 		//     initialTemp * decay ^ iterationCount = minTemp
 		// which can then be solved for the decay variable.
 
-		float initialTemperature = 100;
-		float minTemperature = 0.01f;
-		float targetIterationCount = originalRoute.Length * 150;
-		float temperatureDecay = Mathf.Pow(minTemperature / initialTemperature, 1 / targetIterationCount);
-
-		GD.Print($"Using temp. decay: {temperatureDecay}");
-
 		bool useGreedyRoute = GetNode<Button>("%UseGreedyRouteButton").ButtonPressed;
 
 		solver = new SimulatedAnnealing(
 			useGreedyRoute ? greedyRoute : originalRoute,
-			initialTemperature: initialTemperature,
-			temperatureDecay: temperatureDecay
+
+			initialTemperature: initialTemperature.Value,
+			temperatureDecay: ComputeTemperatureDecay(),
+
+			reheatWhenCool: reheatWhenCool.Value,
+			reheatThresholdTemperature: reheatThresholdTemperature.Value,
+			minReheatAmount: minReheatAmount.Value,
+			maxReheatAmount: maxReheatAmount.Value
 		);
 
-		solver.ReheatWhenCool = GetNode<Button>("%ReheatButton").ButtonPressed;
-
 		UpdateDisplay();
-		isAnimationRunning = false;
-		GetNode<Button>("%ToggleAnimationButton").ButtonPressed = false;
+		isPlayingAnimation.Value = false;
+	}
+
+	private float ComputeTemperatureDecay() {
+		// We're trying to solve for the temperature decay variable, given the initial
+		// temperature, the termination temperature (minTemp.), and the target iteration
+		// count which scales with the number of cities.
+
+		// The equation which is fulfilled at the target iteration count is:
+		//     initialTemp * decay ^ iterationCount = minTemp
+		// which can then be solved for the decay variable.
+
+		float initialTemperature = this.initialTemperature.Value;
+		float minTemperature = 0.001f;
+		float targetIterationCount = originalRoute.Length * 150 / temperatureDecaySpeedModifier.Value;
+		float temperatureDecay = Mathf.Pow(minTemperature / initialTemperature, 1 / targetIterationCount);
+
+		return temperatureDecay;
+	}
+
+	public void ResetAdvancedSettings() {
+		initialTemperature.Reset();
+		temperatureDecaySpeedModifier.Reset();
+		reheatThresholdTemperature.Reset();
+		minReheatAmount.Reset();
+		maxReheatAmount.Reset();
 	}
 }
