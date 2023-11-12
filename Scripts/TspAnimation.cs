@@ -172,14 +172,6 @@ public partial class TspAnimation : Node2D
 
 	public void RestartAnimation()
 	{
-		// We're trying to solve for the temperature decay variable, given the initial
-		// temperature, the termination temperature (minTemp.), and the target iteration
-		// count which scales with the number of cities.
-
-		// The equation which is fulfilled at the target iteration count is:
-		//     initialTemp * decay ^ iterationCount = minTemp
-		// which can then be solved for the decay variable.
-
 		bool useGreedyRoute = GetNode<Button>("%UseGreedyRouteButton").ButtonPressed;
 
 		solver = new SimulatedAnnealing(
@@ -209,7 +201,11 @@ public partial class TspAnimation : Node2D
 		//     initialTemp * decay ^ iterationCount = minTemp
 		// which can then be solved for the decay variable.
 
-		float speedModifier = 1 / temperatureDecaySpeedModifier.Value;
+		// The temperature decay slider allows users to select values between -1 and 1.
+		// This exponential function maps this to an increase / decrease of the
+		// iteration count by 10x.
+		float speedModifier = Mathf.Pow(10, -temperatureDecaySpeedModifier.Value);
+
 		float initialTemperature = this.initialTemperature.Value;
 		float minTemperature = 0.001f;
 		float targetIterationCount = originalRoute.Length * 150 * speedModifier;
