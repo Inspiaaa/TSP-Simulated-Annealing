@@ -238,6 +238,7 @@ text = "Show"
 
 [node name="HSeparator5" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 40
 
 [node name="AdvancedSettingsVBox" type="VBoxContainer" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -345,7 +346,26 @@ theme_override_constants/separation = 10
 
 [node name="ResetButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
 layout_mode = 2
-text = "Reset"
+text = "Reset Settings"
+
+[node name="HSeparator3" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="InfoLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+layout_mode = 2
+text = "Information"
+label_settings = ExtResource("4_ieix8")
+
+[node name="TemperatureDecayValueLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Temp. decay: 0.999996"
+
+[node name="IterationNumberLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Iteration #: 1231231231"
 
 [connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/SetupVBox/NewCitiesButton" to="Animation" method="RestartWithNewCities"]
 [connection signal="pressed" from="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControlVBox/RestartButton" to="Animation" method="RestartAnimation"]

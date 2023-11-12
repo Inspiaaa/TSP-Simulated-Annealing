@@ -15,9 +15,12 @@ public class SimulatedAnnealing
 	public float MinReheatAmount;
 	public float MaxReheatAmount;
 
+	private int iterationCount;
+
 	public Vector2[] BestRoute => cities;
 	public float BestDistance => currentDistance;
 	public float CurrentTemperature => temperature;
+	public float IterationCount => iterationCount;
 
 	public SimulatedAnnealing(
 		Vector2[] cities,
@@ -41,6 +44,8 @@ public class SimulatedAnnealing
 		this.ReheatThresholdTemperature = reheatThresholdTemperature;
 		this.MinReheatAmount = minReheatAmount;
 		this.MaxReheatAmount = maxReheatAmount;
+
+		this.iterationCount = 0;
 	}
 
 	private void SwapCities(int idx1, int idx2)
@@ -160,5 +165,6 @@ public class SimulatedAnnealing
 		}
 
 		temperature *= TemperatureDecay;
+		iterationCount += 1;
 	}
 }

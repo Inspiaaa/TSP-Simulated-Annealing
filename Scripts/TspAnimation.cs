@@ -62,7 +62,7 @@ public partial class TspAnimation : Node2D
 
 		initialTemperature = new NumericInput();
 		temperatureDecaySpeedModifier = new NumericInput(
-			onChange: value => { if (solver != null) solver.TemperatureDecay = ComputeTemperatureDecay(); });
+			onChange: value => { if (solver != null) UpdateTemperatureDecay(); });
 		reheatThresholdTemperature = new NumericInput(
 			onChange: value => { if (solver != null) solver.ReheatThresholdTemperature = value; });
 		minReheatAmount = new NumericInput(
@@ -98,6 +98,7 @@ public partial class TspAnimation : Node2D
 		simulatedAnnealingRouteRenderer.DrawRoute(solver.BestRoute);
 		GetNode<Label>("%TemperatureLabel").Text = $"Temp.: {solver.CurrentTemperature:F3}";
 		GetNode<Label>("%DistanceLabel").Text = FormatDistance(solver.BestDistance);
+		GetNode<Label>("%IterationNumberLabel").Text = $"Iteration #: {solver.IterationCount}";
 	}
 
 	private void SetupOriginalRouteDisplay()
@@ -185,13 +186,15 @@ public partial class TspAnimation : Node2D
 			useGreedyRoute ? greedyRoute : originalRoute,
 
 			initialTemperature: initialTemperature.Value,
-			temperatureDecay: ComputeTemperatureDecay(),
+			temperatureDecay: 0.99f,  // This is a temporary value which will be overwritten.
 
 			reheatWhenCool: reheatWhenCool.Value,
 			reheatThresholdTemperature: reheatThresholdTemperature.Value,
 			minReheatAmount: minReheatAmount.Value,
 			maxReheatAmount: maxReheatAmount.Value
 		);
+
+		UpdateTemperatureDecay();
 
 		UpdateDisplay();
 		isPlayingAnimation.Value = false;
@@ -206,12 +209,19 @@ public partial class TspAnimation : Node2D
 		//     initialTemp * decay ^ iterationCount = minTemp
 		// which can then be solved for the decay variable.
 
+		float speedModifier = 1 / temperatureDecaySpeedModifier.Value;
 		float initialTemperature = this.initialTemperature.Value;
 		float minTemperature = 0.001f;
-		float targetIterationCount = originalRoute.Length * 150 / temperatureDecaySpeedModifier.Value;
+		float targetIterationCount = originalRoute.Length * 150 * speedModifier;
 		float temperatureDecay = Mathf.Pow(minTemperature / initialTemperature, 1 / targetIterationCount);
 
 		return temperatureDecay;
+	}
+
+	private void UpdateTemperatureDecay() {
+		float decay = ComputeTemperatureDecay();
+		solver.TemperatureDecay = decay;
+		GetNode<Label>("%TemperatureDecayValueLabel").Text = $"Decay: {decay :f5}";
 	}
 
 	public void ResetAdvancedSettings() {
