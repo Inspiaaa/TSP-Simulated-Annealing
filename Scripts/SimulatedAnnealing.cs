@@ -20,7 +20,7 @@ public class SimulatedAnnealing
 	public Vector2[] BestRoute => cities;
 	public float BestDistance => currentDistance;
 	public float CurrentTemperature => temperature;
-	public float IterationCount => iterationCount;
+	public int IterationCount => iterationCount;
 
 	public SimulatedAnnealing(
 		Vector2[] cities,
@@ -185,7 +185,7 @@ public class SimulatedAnnealing
 		Action acceptSolution = null;
 		float distanceChange = 0;
 
-		switch (Random.Shared.Next(4))
+		switch (Random.Shared.Next(6))
 		{
 			case 0:
 				int swapIndexA = RandomIndex();
@@ -195,7 +195,7 @@ public class SimulatedAnnealing
 				distanceChange = ComputeDistanceDeltaAfterSwap(swapIndexA, swapIndexB);
 				break;
 
-			case 1:
+			case 1: case 2:
 				// This operation only works for more than 3 cities.
 				int startIndex = RandomIndex();
 				int count = Random.Shared.Next(1, cities.Length/4);
@@ -208,7 +208,7 @@ public class SimulatedAnnealing
 				break;
 
 			// Twice as likely as it is more powerful.
-			case 2: case 3:
+			case 3: case 4: case 5:
 				int reverseStartIndex = RandomIndex();
 				int reverseCount = Random.Shared.Next(1, cities.Length / 2);
 
