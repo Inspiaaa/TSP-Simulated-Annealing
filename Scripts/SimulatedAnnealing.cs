@@ -67,6 +67,23 @@ public class SimulatedAnnealing
 		}
 	}
 
+	private void TransportRange(int startIndex, int count, int distance) {
+		Vector2[] citiesToMove = new Vector2[count];
+		for (int i = 0; i < count; i ++) {
+			citiesToMove[i] = cities[WrapIndex(startIndex + i)];
+		}
+
+		// Move the right segment to the left.
+		for (int i = 0; i < distance; i ++) {
+			cities[WrapIndex(startIndex + i)] = cities[WrapIndex(startIndex + i + count)];
+		}
+
+		// Move the previous left segment to the right.
+		for (int i = 0; i < count; i ++) {
+			cities[WrapIndex(startIndex + distance + i)] = citiesToMove[i];
+		}
+	}
+
 	private float ComputeDistanceDeltaAfterReverse(int startIndex, int count)
 	{
 		int endIndex = WrapIndex(startIndex + count);
@@ -124,16 +141,51 @@ public class SimulatedAnnealing
 		return delta;
 	}
 
+	private float ComputeDistanceDeltaAfterTransport(int startIndex, int count, int distance) {
+		int leftSegmentStartIndex = startIndex;
+		int leftSegmentEndIndex = WrapIndex(startIndex + count - 1);
+		int indexBeforeLeftSegment = WrapIndex(startIndex - 1);
+
+		int rightSegmentStartIndex = WrapIndex(leftSegmentEndIndex + 1);
+		int rightSegmentEndIndex = WrapIndex(rightSegmentStartIndex + distance - 1);
+		int indexAfterRightSegment =  WrapIndex(rightSegmentEndIndex + 1);
+
+		Vector2 posBeforeLeftSegment = cities[indexBeforeLeftSegment];
+		Vector2 leftSegmentStart = cities[leftSegmentStartIndex];
+		Vector2 leftSegmentEnd = cities[leftSegmentEndIndex];
+
+		Vector2 rightSegmentStart = cities[rightSegmentStartIndex];
+		Vector2 rightSegmentEnd = cities[rightSegmentEndIndex];
+		Vector2 posAfterRightSegment = cities[indexAfterRightSegment];
+
+		float delta = 0;
+		delta -= posBeforeLeftSegment.DistanceTo(leftSegmentStart);
+		delta -= leftSegmentEnd.DistanceTo(rightSegmentStart);
+		delta -= rightSegmentEnd.DistanceTo(posAfterRightSegment);
+
+		delta += posBeforeLeftSegment.DistanceTo(rightSegmentStart);
+		delta += rightSegmentEnd.DistanceTo(leftSegmentStart);
+		delta += leftSegmentEnd.DistanceTo(posAfterRightSegment);
+
+		return delta;
+	}
+
 	public void Simulate()
 	{
 		if (ReheatWhenCool && temperature < ReheatThresholdTemperature) {
 			temperature += (float)GD.RandRange(MinReheatAmount, MaxReheatAmount);
 		}
 
+		if (cities.Length <= 3) {
+			temperature *= TemperatureDecay;
+			iterationCount += 1;
+			return;
+		}
+
 		Action acceptSolution = null;
 		float distanceChange = 0;
 
-		switch (Random.Shared.Next(3))
+		switch (Random.Shared.Next(4))
 		{
 			case 0:
 				int swapIndexA = RandomIndex();
@@ -143,8 +195,20 @@ public class SimulatedAnnealing
 				distanceChange = ComputeDistanceDeltaAfterSwap(swapIndexA, swapIndexB);
 				break;
 
+			case 1:
+				// This operation only works for more than 3 cities.
+				int startIndex = RandomIndex();
+				int count = Random.Shared.Next(1, cities.Length/4);
+				// Note: count+distance must be LESS than the number of cities for the
+				// ComputeDistanceDeltaAfterTransport method to work properly.
+				int distance = Random.Shared.Next(1, cities.Length - count);
+
+				acceptSolution = () => TransportRange(startIndex, count, distance);
+				distanceChange = ComputeDistanceDeltaAfterTransport(startIndex, count, distance);
+				break;
+
 			// Twice as likely as it is more powerful.
-			case 1: case 2:
+			case 2: case 3:
 				int reverseStartIndex = RandomIndex();
 				int reverseCount = Random.Shared.Next(1, cities.Length / 2);
 
