@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwev31i1l5xbs"]
+
+[ext_resource type="Script" path="res://Scripts/PerformanceAnalysis.cs" id="1_kb47s"]
+
+[node name="Node" type="Node"]
+script = ExtResource("1_kb47s")
+maxIterations = 12000
+outputPath = "res://Benchmark/performance.txt"

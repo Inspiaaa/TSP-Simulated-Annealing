@@ -31,4 +31,9 @@ public static class TspUtil
 
 		return cities;
 	}
+
+	public static Vector2[] CreateRandomCities(int count, int seed, float width, float height) {
+		GD.Seed((ulong)seed);
+		return CreateRandomCities(count, width, height);
+	}
 }
