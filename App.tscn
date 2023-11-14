@@ -311,7 +311,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 tooltip_text = "Threshold at which the \"reheat\" feature will 
 increase the temperature."
-min_value = 0.001
 step = 0.001
 value = 0.005
 update_on_text_changed = true
