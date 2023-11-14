@@ -260,6 +260,8 @@ text = "Initial temp."
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Value of the temperature parameter at the start 
+of the simulation."
 max_value = 1000.0
 step = 0.01
 value = 100.0
@@ -279,6 +281,8 @@ text = "Decay speed"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Determines how fast the temperature parameter
+is decreased."
 min_value = -1.0
 max_value = 1.0
 step = 0.0
@@ -305,6 +309,8 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+tooltip_text = "Threshold at which the \"reheat\" feature will 
+increase the temperature."
 min_value = 0.001
 step = 0.001
 value = 0.005
@@ -319,6 +325,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+tooltip_text = "When the \"reheat\" feature increases the
+temperature, it chooses a random value
+between the lower and upper bound."
 step = 0.01
 value = 0.5
 allow_greater = true
@@ -333,6 +342,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+tooltip_text = "When the \"reheat\" feature increases the
+temperature, it chooses a random value
+between the lower and upper bound."
 step = 0.01
 value = 10.0
 allow_greater = true
@@ -344,6 +356,7 @@ theme_override_constants/separation = 10
 
 [node name="ResetButton" type="Button" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
 layout_mode = 2
+tooltip_text = "Resets the advanced settings to their default values."
 text = "Reset Settings"
 
 [node name="HSeparator3" type="HSeparator" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
@@ -358,6 +371,9 @@ label_settings = ExtResource("4_ieix8")
 [node name="TemperatureDecayValueLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Base of the internal exponential function that 
+determines the temperature curve over time (iterations)."
+mouse_filter = 1
 text = "Temp. decay: 0.999996"
 
 [node name="IterationNumberLabel" type="Label" parent="UI/MarginContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/AdvancedSettingsVBox"]
