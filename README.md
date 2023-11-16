@@ -10,9 +10,11 @@ The app is made using Godot 4. The program logic is written in C# and the render
 
 1. Download the latest version of the app from the [releases](https://github.com/Inspiaaa/TSP-Simulated-Annealing/releases) page.
 
-2. Run the executable.
+2. Extract the files from the zip file.
 
-3. See the next section for usage instructions.
+3. Run the executable.
+
+4. See the next section for usage instructions.
 
 ## Basic controls
 
